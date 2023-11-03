@@ -1,0 +1,7 @@
+T | 0 | cleaning
+D | 1 | cleaning | 1
+T | 0 | cleaning
+D | 1 | cleaning | never
+E | 1 | cleaning | today-tomorrow
+E | 1 | tidying | 4pm-8pm
+E | 1 | running | 20 Apr 2023, 18:00PM-21 Apr 2023, 18:20PM
