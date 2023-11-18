@@ -23,16 +23,18 @@ public class TaskList {
         for(String tLine : tL) {
             int i = tLine.indexOf("|");
             for (int j = tLine.indexOf("|", i+1); i != -1; j=tLine.indexOf("|", i+1)) {
-                if(j == -1){
+                if(j == -1 && tLine.contains("Status")){
                     if(tLine.contains("-")){
                         tdWords.add(tLine.substring(i+2, tLine.indexOf("-")).trim());
                         tdWords.add(tLine.substring(tLine.indexOf("-")+1, tLine.indexOf("Status")).trim());
-                    } else if(!tLine.contains("Status")) {
-                        tdWords.add(tLine.substring(i+2));
                     } else {
                         tdWords.add(tLine.substring(i+2, tLine.indexOf("Status")).trim());
                     }
-                } else {
+                    tdWords.add(tLine.substring(tLine.indexOf("Status") + 7).trim());
+                }else if(j == -1){
+                    tdWords.add(tLine.substring(i+2));
+                }
+                else {
                     tdWords.add(tLine.substring(i+2, j).trim());
                 }
                 i = j;
@@ -48,14 +50,22 @@ public class TaskList {
                         tmpDeadline = new Deadline(tdWords.get(1));
                         tmpDeadline.setBy(tdWords.get(2));
                         tmpDeadline.markNotDone();
-                        tmpDeadline.isDue();
+                        if(tdWords.get(3).equals("POSTPONED")){
+                            tmpDeadline.postponeDeadline();
+                        }else{
+                            tmpDeadline.isDue();
+                        }
                         tempList.add(tmpDeadline);
                     } else {
                         tmpEvent = new Event(tdWords.get(1));
                         tmpEvent.setFrom(tdWords.get(2));
                         tmpEvent.setTo(tdWords.get(3));
                         tmpEvent.markNotDone();
-                        tmpEvent.isDue();
+                        if(tdWords.get(4).equals("POSTPONED")){
+                            tmpEvent.postponeEvent();
+                        }else{
+                            tmpEvent.isDue();
+                        }
                         tempList.add(tmpEvent);
                     }
                     break;
@@ -68,14 +78,22 @@ public class TaskList {
                         tmpDeadline = new Deadline(tdWords.get(1));
                         tmpDeadline.setBy(tdWords.get(2));
                         tmpDeadline.markAsDone();
-                        tmpDeadline.isDue();
+                        if(tdWords.get(3).equals("POSTPONED")){
+                            tmpDeadline.postponeDeadline();
+                        }else{
+                            tmpDeadline.isDue();
+                        }
                         tempList.add(tmpDeadline);
                     } else {
                         tmpEvent = new Event(tdWords.get(1));
                         tmpEvent.setFrom(tdWords.get(2));
                         tmpEvent.setTo(tdWords.get(3));
                         tmpEvent.markAsDone();
-                        tmpEvent.isDue();
+                        if(tdWords.get(4).equals("POSTPONED")){
+                            tmpEvent.postponeEvent();
+                        }else{
+                            tmpEvent.isDue();
+                        }
                         tempList.add(tmpEvent);
                     }
                     break;
@@ -140,11 +158,13 @@ public class TaskList {
      * @param index the task no shown in the list displayed.
      */
     public void markTask(int index) throws DukeException{
-        boolean aDeadline = this.tempList.get(index) instanceof Deadline;
-        boolean anEvent = this.tempList.get(index) instanceof Event;
         try {
+            boolean aDeadline = this.tempList.get(index) instanceof Deadline;
+            boolean anEvent = this.tempList.get(index) instanceof Event;
             if (this.tempList.isEmpty()){
                 throw new DukeException("No task in the list!");
+            } else if(this.tempList.get(index).getStatusIcon().equals("X")){
+                System.out.println("Task is already marked as done!");
             } else {
                 this.tempList.get(index).markAsDone();
                 if (aDeadline){
@@ -167,11 +187,13 @@ public class TaskList {
      * @param index the task no shown in the list displayed.
      */
     public void unmarkTask(int index) throws DukeException{
-        boolean aDeadline = this.tempList.get(index) instanceof Deadline;
-        boolean anEvent = this.tempList.get(index) instanceof Event;
         try {
+            boolean aDeadline = this.tempList.get(index) instanceof Deadline;
+            boolean anEvent = this.tempList.get(index) instanceof Event;
             if (this.tempList.isEmpty()){
                 throw new DukeException("No task in the list!");
+            } else if(this.tempList.get(index).getStatusIcon().equals(" ")){
+              System.out.println("Task is not marked as done! Cannot unmark task.");
             } else {
                 this.tempList.get(index).markNotDone();
                 if (aDeadline){
@@ -254,36 +276,50 @@ public class TaskList {
         }
     }
     public void snoozeTask(int index) throws DukeException {
-       boolean ifDeadline = tempList.get(index) instanceof Deadline;
-       boolean ifEvent = tempList.get(index) instanceof Event;
-       if(ifDeadline){
-          LocalDateTime datetimeBy = (LocalDateTime) ((Deadline) tempList.get(index)).getBy();
-          ((Deadline) tempList.get(index)).setBy(datetimeBy.plusDays(7));
-          System.out.println("Deadline snoozed for 7 days!");
-       } else if (ifEvent){
-           LocalDateTime datetimeFrom = (LocalDateTime) ((Event) tempList.get(index)).getEventFrom();
-           LocalDateTime datetimeTo = (LocalDateTime) ((Event) tempList.get(index)).getEventTo();
-           ((Event) tempList.get(index)).setFrom(datetimeFrom.plusDays(7));
-           ((Event) tempList.get(index)).setTo(datetimeTo.plusDays(7));
-           System.out.println("Event snoozed for 7 days!");
-       }
+        try{
+            boolean ifDeadline = tempList.get(index) instanceof Deadline;
+            boolean ifEvent = tempList.get(index) instanceof Event;
+            if(ifDeadline){
+                LocalDateTime datetimeBy = (LocalDateTime) ((Deadline) tempList.get(index)).getBy();
+                ((Deadline) tempList.get(index)).setBy(datetimeBy.plusDays(7));
+                System.out.println("Deadline snoozed for 7 days!");
+            } else if (ifEvent){
+                LocalDateTime datetimeFrom = (LocalDateTime) ((Event) tempList.get(index)).getEventFrom();
+                LocalDateTime datetimeTo = (LocalDateTime) ((Event) tempList.get(index)).getEventTo();
+                ((Event) tempList.get(index)).setFrom(datetimeFrom.plusDays(7));
+                ((Event) tempList.get(index)).setTo(datetimeTo.plusDays(7));
+                System.out.println("Event snoozed for 7 days!");
+            }
+        } catch (IndexOutOfBoundsException e){
+            throw new DukeException("Task number does not exist! Please try again!" + System.lineSeparator());
+        }
     }
-    public void postponeTask(int index){
-        boolean ifDeadline = tempList.get(index) instanceof Deadline;
-        boolean ifEvent = tempList.get(index) instanceof Event;
-        if(ifDeadline){
-            ((Deadline) tempList.get(index)).postponeDeadline();
-        } else if(ifEvent){
-            ((Event) tempList.get(index)).postponeEvent();
+    public void postponeTask(int index) throws DukeException{
+        try{
+            boolean ifDeadline = tempList.get(index) instanceof Deadline;
+            boolean ifEvent = tempList.get(index) instanceof Event;
+            if(ifDeadline){
+                ((Deadline) tempList.get(index)).postponeDeadline();
+                System.out.println("Deadline postponed!");
+            } else if(ifEvent){
+                ((Event) tempList.get(index)).postponeEvent();
+                System.out.println("Event postponed!");
+            }
+        } catch (IndexOutOfBoundsException e){
+            throw new DukeException("Task number does not exist! Please try again!" + System.lineSeparator());
         }
     }
     public void rescheduleTask(int index) throws DukeException{
-        boolean isDeadline = tempList.get(index) instanceof Deadline;
-        boolean isEvent = tempList.get(index) instanceof Event;
-        if(isDeadline){
-            ((Deadline) tempList.get(index)).rescheduleDeadline();
-        } else if(isEvent){
-            ((Event) tempList.get(index)).rescheduleEvent();
+        try{
+            boolean isDeadline = tempList.get(index) instanceof Deadline;
+            boolean isEvent = tempList.get(index) instanceof Event;
+            if(isDeadline){
+                ((Deadline) tempList.get(index)).rescheduleDeadline();
+            } else if(isEvent){
+                ((Event) tempList.get(index)).rescheduleEvent();
+            }
+        } catch (IndexOutOfBoundsException e){
+            throw new DukeException("Task number does not exist! Please try again!" + System.lineSeparator());
         }
     }
     /**

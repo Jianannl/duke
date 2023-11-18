@@ -11,11 +11,10 @@ public class Deadline extends Task {
 
     protected Object by;
     protected String due = "NA";
-    private Ui ui = new Ui();
+    private final Ui ui = new Ui();
     public Deadline(String description) {
         super(description);
     }
-
     public void setBy(Object deadlineDate) throws DukeException {
         if(deadlineDate instanceof LocalDateTime) {
             this.by = deadlineDate;
@@ -23,17 +22,14 @@ public class Deadline extends Task {
             this.by = setDate((String) deadlineDate);
         }
     }
-
     public Object getBy() {
         return this.by;
     }
-
     public boolean checkDescription(String word){
         return this.description.contains(word);
     }
     public void postponeDeadline(){
         this.due = "POSTPONED";
-        System.out.println("Deadline postponed!");
     }
     public void rescheduleDeadline() throws DukeException{
         System.out.println("Please set Deadline: ");
@@ -64,7 +60,6 @@ public class Deadline extends Task {
         String tmpString = formatToString(this.by);
         return "D | " + super.toSave() + " | " + tmpString + " Status: " + this.due;
     }
-
     /**
      * Formatting to show a deadline task in a list.
      */

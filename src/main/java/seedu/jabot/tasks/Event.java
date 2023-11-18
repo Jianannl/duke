@@ -80,7 +80,6 @@ public class Event extends Task{
     }
     public void postponeEvent(){
         this.due = "POSTPONED";
-        System.out.println("Event postponed!");
     }
     public void rescheduleEvent() throws DukeException{
         boolean checkFrom;

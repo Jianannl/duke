@@ -5,8 +5,6 @@ import seedu.jabot.exceptions.DukeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Represent an underlying component to transform the inputs by the user to
@@ -98,22 +96,19 @@ public class Parser {
 
     public LocalDate convertDate(String aDate) throws DukeException {
         DateTimeFormatter dtFormatter;
-        String dateTM = "(\\d{2}[-/\\s]?){2}\\d{4}";
-        Pattern dTpattern = Pattern.compile(dateTM);
-        Matcher dTMatch = dTpattern.matcher(aDate);
         try {
-                switch (aDate.charAt(2)) {
-                    case '/':
-                        dtFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                        break;
-                    case '-':
-                        dtFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                        break;
-                    default:
-                        dtFormatter = DateTimeFormatter.ofPattern("ddMMyyyy");
-                        break;
-                }
-                return LocalDate.parse(aDate, dtFormatter);
+            switch (aDate.charAt(2)) {
+                case '/':
+                    dtFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    break;
+                case '-':
+                    dtFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                    break;
+                default:
+                    dtFormatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+                    break;
+            }
+            return LocalDate.parse(aDate, dtFormatter);
         } catch (DateTimeParseException e) {
             throw new DukeException("Invalid date format! Please input date-time in the format of dd/MM/yyyy (24hr format)");
         }
