@@ -1,0 +1,7 @@
+T | 0 | cleaning
+E | 0 | school holiday | 05 Dec 2023 08:00AM - 10 Dec 2023 23:59PM Status: NOT DUE
+D | 0 | assignment | Sunday Status: NA
+D | 0 | assignment | 19 Nov 2023 23:59PM Status: NOT DUE
+E | 0 | happy event! | 23 Nov 2023 00:00AM - 25 Nov 2023 23:59PM Status: NOT DUE
+D | 0 | project work | 25 Nov 2023 23:59PM Status: POSTPONED
+E | 0 | super party | 22 Nov 2023 12:00PM - 23 Nov 2023 13:00PM Status: POSTPONED

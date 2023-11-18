@@ -5,11 +5,11 @@ import java.util.Scanner;
  * Represent the user interface to show messages and read inputs
  */
 public class Ui {
-    protected String logo = " ____        _        \n"
-            + "|  _ \\ _   _| | _____ \n"
-            + "| | | | | | | |/ / _ \\\n"
-            + "| |_| | |_| |   <  __/\n"
-            + "|____/ \\__,_|_|\\_\\___|\n";
+    protected String logo = " _____   _____   _____    _____   ______\n"
+            + "|___  | /  _  \\ |  _  \\  /     \\ |_    _|\n"
+            + " _  | | | |_| | |  _  / /  / \\  \\  |  |   \n"
+            + "| |_| | |  _  | |  _  \\ \\  \\ /  /  |  |  \n"
+            + "|____/  |_| |_| |_____/  \\_____/   |__|   \n";
 
     protected String dividerL = "________________________________________";
     protected Scanner in = new Scanner(System.in);
@@ -20,8 +20,8 @@ public class Ui {
      * To load the welcome screen.
      */
     public void welcomeScreen(){
-        System.out.println("Hello from\n" + logo);
-        System.out.println("Hello! I'm Jabot" + System.lineSeparator() + "What can I do for you?");
+        System.out.println(System.lineSeparator() + logo);
+        System.out.println("Hello! I'm JABOT" + System.lineSeparator() + "What can I do for you?" + System.lineSeparator());
     }
 
     /**
@@ -54,6 +54,6 @@ public class Ui {
      * To show saving message when saving.
      */
     public void saveMsg(){
-        System.out.println("Saving...");
+        System.out.println("Saved. You're good to go! (FYI, task.txt is in desktop folder~)");
     }
 }

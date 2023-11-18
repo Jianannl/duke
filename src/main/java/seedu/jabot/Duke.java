@@ -3,6 +3,8 @@ import seedu.jabot.data.*;
 import seedu.jabot.util.*;
 import seedu.jabot.exceptions.DukeException;
 
+import java.io.File;
+
 /**
  * Represent the initialisation of jabot
  * A <code>Duke</code> make up of the file path to load the saved
@@ -11,8 +13,7 @@ import seedu.jabot.exceptions.DukeException;
 public class Duke {
     private Storage storage;
     private TaskList tasks;
-    private Ui ui;
-    private Parser Parser;
+    private final Ui ui;
     public Duke(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);
@@ -29,14 +30,16 @@ public class Duke {
      */
     public void run() {
         ui.welcomeScreen();
-        Parser = new Parser();
-        storage = new Storage("C:/Users/leej32/Documents/duke/src/main/java/seedu/jabot/tasks.txt");
+        Parser parser = new Parser();
+        storage = new Storage(System.getProperty("user.home")+ File.separator + "Desktop/task.txt");
         boolean isExit = false;
         while (!isExit) {
             try {
                 String fullCommand = ui.readCommand();
                 ui.showLine(); // show the divider line ("_______")
-                Command c = Parser.parse(fullCommand);
+                Command c = parser.parse(fullCommand);
+                //assert that command c should not null, otherwise not operation will be executed
+                assert c != null;
                 c.execute(tasks, ui, storage);
                 isExit = c.isExit();
             } catch (DukeException e) {
@@ -51,7 +54,7 @@ public class Duke {
      * To invoke the run method
      */
     public static void main(String[] args) {
-        new Duke("C:/Users/leej32/Documents/duke/src/main/java/seedu/jabot/tasks.txt").run();
+        new Duke(System.getProperty("user.home") + File.separator + "Desktop/task.txt").run();
     }
 }
 

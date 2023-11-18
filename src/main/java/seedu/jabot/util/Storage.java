@@ -15,8 +15,8 @@ public class Storage {
     protected File sF;
     protected FileWriter wF;
     protected Scanner scanF;
-    public Storage(String fPath){
-        this.sF = new File(fPath);
+    public Storage(String filePath){
+        this.sF = new File(filePath);
     }
 
     /**
@@ -29,7 +29,7 @@ public class Storage {
         try {
             if(!this.sF.exists()){
                 this.sF.createNewFile();
-                System.out.println("File did not exist! A new file named Task.txt was created.");
+                System.out.println("File did not exist! A new file named Task.txt was created on the desktop.");
             }
             this.wF = new FileWriter(this.sF);
             for (Task task : aT) {
